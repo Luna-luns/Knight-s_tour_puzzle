@@ -1,30 +1,44 @@
-from invalid_input_error import InvalidInputError
+from dimension_error import DimensionError
+from position_error import PositionError
 from field import Field
+from coordinates import Coordinates
 
 
-def ask_position() -> str:
+def ask_board_dim() -> list:
     while True:
         try:
-            coordinates = input("Enter the knight's starting position: ").replace(' ', '')
-            if not coordinates.isdigit() or len(coordinates) != 2 or\
-                    (int(coordinates[0]) < 1 or int(coordinates[0]) > 8 or
-                     int(coordinates[1]) < 1 or int(coordinates[1]) > 8):
-                raise InvalidInputError
+            coordinates = input("Enter your board dimensions: ").split()
+            if not coordinates[0].isdigit() and coordinates[1].isdigit() or len(coordinates) != 2 or \
+                    (int(coordinates[0]) < 1 or int(coordinates[1]) < 1):
+                raise DimensionError
             return coordinates
-        except InvalidInputError as error:
+        except DimensionError as error:
             print_error(error)
 
 
-def print_error(error: InvalidInputError) -> None:
+def ask_position(coord: Coordinates) -> list:
+    while True:
+        try:
+            coordinates = input("Enter the knight's starting position: ").split()
+            if not coordinates[0].isdigit() and coordinates[1].isdigit() or len(coordinates) != 2 or\
+                    (int(coordinates[0]) < 1 or int(coordinates[1]) < 1) or\
+                    (int(coordinates[0]) > coord.x or int(coordinates[1]) > coord.y):
+                raise PositionError
+            return coordinates
+        except PositionError as error:
+            print_error(error)
+
+
+def print_error(error: Exception) -> None:
     print(error)
 
 
-def print_board(field: Field) -> None:
-    frame = ' ' + '-' * 19
+def print_board(field: Field, board: Coordinates, size: int) -> None:
+    frame = ' ' + '-' * (board.x * (size + 1) + 3)
     print(frame)
-    for y in range(8, 0, -1):
-        board_str = ' '.join([field.get_value(x, y) for x in range(1, 9)])
+    for y in range(board.y, 0, -1):
+        board_str = ' '.join([field.get_value(x, y) for x in range(1, board.x + 1)])
         print(f"{y}| {board_str} |")
     print(frame)
     print(' ' * 3, end='')
-    [print(i, end=' ') for i in range(1, 9)]
+    [print(' ' * (size - 1) + f'{i}', end=' ') for i in range(1, board.x + 1)]

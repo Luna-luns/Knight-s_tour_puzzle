@@ -1,6 +1,9 @@
+from coordinates import Coordinates
+
+
 class Field:
-    def __init__(self):
-        self.field = [['_' for _ in range(0, 8)] for _ in range(0, 8)]
+    def __init__(self, board: Coordinates, size: int):
+        self.field = [['_' * size for _ in range(0, board.y)] for _ in range(0, board.x)]
 
     def get_value(self, x: int, y: int) -> str:
         """Возвращает то, что лежит в поле ("Х" или "_")"""
