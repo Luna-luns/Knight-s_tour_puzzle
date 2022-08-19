@@ -1,6 +1,7 @@
 import ui
 from coordinates import Coordinates
 from field import Field
+from moves import Moves
 
 
 board_dim = ui.ask_board_dim()
@@ -13,4 +14,9 @@ coordinates = Coordinates(int(start_position[0]), int(start_position[1]))
 field = Field(board, cell_size)
 x_placeholder = ' ' * (cell_size - 1) + 'X'
 field.set_value(coordinates.x, coordinates.y, x_placeholder)
+
+o_placeholder = ' ' * (cell_size - 1) + 'O'
+direction = Moves()
+direction.set_possible_value(board, coordinates, o_placeholder, field)
+
 ui.print_board(field, board, cell_size)

@@ -29,6 +29,11 @@ def ask_position(coord: Coordinates) -> list:
             print_error(error)
 
 
+def print_possible_moves():
+    print('Here are the possible moves:')
+    pass
+
+
 def print_error(error: Exception) -> None:
     print(error)
 
