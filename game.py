@@ -15,8 +15,8 @@ field = Field(board, cell_size)
 x_placeholder = ' ' * (cell_size - 1) + 'X'
 field.set_value(coordinates.x, coordinates.y, x_placeholder)
 
-o_placeholder = ' ' * (cell_size - 1) + 'O'
+moves_placeholder = ' ' * (cell_size - 1)
 direction = Moves()
-direction.set_possible_value(board, coordinates, o_placeholder, field)
-
+direction.set_possible_value(board, coordinates, cell_size, field, x_placeholder)
+ui.print_possible_moves()
 ui.print_board(field, board, cell_size)
