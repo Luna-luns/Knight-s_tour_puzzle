@@ -2,6 +2,8 @@ from dimension_error import DimensionError
 from position_error import PositionError
 from field import Field
 from coordinates import Coordinates
+from move_error import MoveError
+from placeholder import Placeholder
 
 
 def ask_board_dim() -> list:
@@ -16,21 +18,35 @@ def ask_board_dim() -> list:
             print_error(error)
 
 
-def ask_position(coord: Coordinates) -> list:
+def is_valid(coordinates: list, board: Coordinates) -> bool:
+    return not coordinates[0].isdigit() and coordinates[1].isdigit() or len(coordinates) != 2 or\
+                    (int(coordinates[0]) < 1 or int(coordinates[1]) < 1) or\
+                    (int(coordinates[0]) > board.x or int(coordinates[1]) > board.y)
+
+
+def ask_position(board: Coordinates) -> list:
     while True:
         try:
             coordinates = input("Enter the knight's starting position: ").split()
-            if not coordinates[0].isdigit() and coordinates[1].isdigit() or len(coordinates) != 2 or\
-                    (int(coordinates[0]) < 1 or int(coordinates[1]) < 1) or\
-                    (int(coordinates[0]) > coord.x or int(coordinates[1]) > coord.y):
+            if is_valid(coordinates, board):
                 raise PositionError
             return coordinates
         except PositionError as error:
             print_error(error)
 
 
-def print_possible_moves():
-    print('\n' + 'Here are the possible moves:')
+def ask_next_move(board: Coordinates, placeholder: Placeholder, field: Field, size: int) -> list:
+    while True:
+        try:
+            coordinates = input('\n\n' + 'Enter your next move: ').split()
+            if is_valid(coordinates, board) or\
+                    field.get_value(int(coordinates[0]), int(coordinates[1])) == placeholder.x_placeholder or \
+                    field.get_value(int(coordinates[0]), int(coordinates[1])) == '_' * size or\
+                    field.get_value(int(coordinates[0]), int(coordinates[1])) == placeholder.aster_placeholder:
+                raise MoveError
+            return coordinates
+        except MoveError as error:
+            print_error(error)
 
 
 def print_error(error: Exception) -> None:
@@ -46,3 +62,11 @@ def print_board(field: Field, board: Coordinates, size: int) -> None:
     print(frame)
     print(' ' * 3, end='')
     [print(' ' * (size - 1) + f'{i}', end=' ') for i in range(1, board.x + 1)]
+
+
+def print_loss(num: int) -> None:
+    print(f'\n\nNo more possible moves!\nYour knight visited {num} squares!')
+
+
+def print_win() -> None:
+    print('\n\nWhat a great tour! Congratulations!')
