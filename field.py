@@ -1,4 +1,5 @@
 from coordinates import Coordinates
+from placeholder import Placeholder
 
 
 class Field:
@@ -11,3 +12,12 @@ class Field:
 
     def set_value(self, x: int, y: int, value: str) -> None:
         self.field[x - 1][y - 1] = value
+
+    def is_win(self, placeholder: Placeholder, board: Coordinates) -> bool:
+        result = 0
+        matrix_size = board.x * board.y
+
+        for elem in self.field:
+            result += elem.count(placeholder.aster_placeholder)
+
+        return result == matrix_size - 1

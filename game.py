@@ -24,11 +24,11 @@ while True:
     ui.print_board(field, board, cell_size)
     count += 1
 
-    if direction.moves is False:
-        ui.print_loss(count)
-        break
-    elif direction.moves is False and :
+    if field.is_win(placeholder, board):
         ui.print_win()
+        break
+    elif direction.moves is False:
+        ui.print_loss(count)
         break
 
     next_move = ui.ask_next_move(board, placeholder, field, cell_size)
