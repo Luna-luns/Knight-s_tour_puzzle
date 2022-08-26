@@ -4,6 +4,7 @@ from field import Field
 from coordinates import Coordinates
 from move_error import MoveError
 from placeholder import Placeholder
+from  answer_error import AnswerError
 
 
 def ask_board_dim() -> list:
@@ -38,7 +39,7 @@ def ask_position(board: Coordinates) -> list:
 def ask_next_move(board: Coordinates, placeholder: Placeholder, field: Field, size: int) -> list:
     while True:
         try:
-            coordinates = input('\n\n' + 'Enter your next move: ').split()
+            coordinates = input('Enter your next move: ').split()
             if is_valid(coordinates, board) or\
                     field.get_value(int(coordinates[0]), int(coordinates[1])) == placeholder.x_placeholder or \
                     field.get_value(int(coordinates[0]), int(coordinates[1])) == '_' * size or\
@@ -46,7 +47,18 @@ def ask_next_move(board: Coordinates, placeholder: Placeholder, field: Field, si
                 raise MoveError
             return coordinates
         except MoveError as error:
-            print_error(error)
+            print(error, end='')
+
+
+def ask_trial() -> str:
+    while True:
+        try:
+            answer = input('Do you want to try the puzzle? (y/n): ').strip()
+            if answer not in ('y', 'n'):
+                raise AnswerError
+            return answer
+        except AnswerError as error:
+            print(error)
 
 
 def print_error(error: Exception) -> None:
@@ -62,6 +74,7 @@ def print_board(field: Field, board: Coordinates, size: int) -> None:
     print(frame)
     print(' ' * 3, end='')
     [print(' ' * (size - 1) + f'{i}', end=' ') for i in range(1, board.x + 1)]
+    print()
 
 
 def print_loss(num: int) -> None:
@@ -70,3 +83,11 @@ def print_loss(num: int) -> None:
 
 def print_win() -> None:
     print('\n\nWhat a great tour! Congratulations!')
+
+
+def print_solution_absence() -> None:
+    print('No solution exists!')
+
+
+def print_solution() -> None:
+    print('\n' + "Here's the solution!")

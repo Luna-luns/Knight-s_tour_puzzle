@@ -21,3 +21,10 @@ class Field:
             result += elem.count(placeholder.aster_placeholder)
 
         return result == matrix_size - 1
+
+    def is_full(self) -> bool:
+        bools = []
+        for elem in self.field:
+            for el in elem:
+                bools.append(bool(el.strip().isdigit()))
+        return all(bools)
